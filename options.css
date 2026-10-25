@@ -169,6 +169,10 @@ textarea:focus-visible {
   flex-wrap: wrap;
 }
 
+section > p {
+  color: #52616b;
+}
+
 [hidden] {
   display: none !important;
 }

@@ -2,6 +2,7 @@ const STORAGE_KEY = "crispQuickReplies";
 const MAX_SEQUENCE_TIME_MS = 3000;
 const states = new WeakMap();
 let shortcuts = [];
+let composerDetectionLogged = false;
 
 function isEditable(element) {
   if (!(element instanceof HTMLElement)) {
@@ -192,9 +193,18 @@ function onKeyDown(event) {
     return;
   }
 
+  if (!composerDetectionLogged) {
+    composerDetectionLogged = true;
+    window.CrispQuickRepliesDiagnostics.record("crisp_composer_detected");
+  }
+
   const now = Date.now();
   const state = getState(composer);
-  if (!state.sequence || now - state.startedAt > MAX_SEQUENCE_TIME_MS) {
+  if (state.sequence && now - state.startedAt > MAX_SEQUENCE_TIME_MS) {
+    window.CrispQuickRepliesDiagnostics.record("shortcut_sequence_timed_out");
+    state.sequence = "";
+  }
+  if (!state.sequence) {
     state.sequence = "";
     state.startedAt = now;
   }
@@ -207,14 +217,17 @@ function onKeyDown(event) {
       shortcut.sequence === state.sequence
   );
   if (matching) {
+    window.CrispQuickRepliesDiagnostics.record("shortcut_matched");
     const expectedPrefix = matching.sequence.slice(0, -event.key.length);
     if (replaceBeforeCaret(composer, expectedPrefix, matching.response)) {
       console.debug("[Crisp Quick Replies] Expanded a shortcut.");
+      window.CrispQuickRepliesDiagnostics.record("shortcut_expanded");
       event.preventDefault();
     } else {
       console.error(
         "Crisp Quick Replies matched a shortcut but could not find its typed prefix at the caret."
       );
+      window.CrispQuickRepliesDiagnostics.record("shortcut_replace_failed");
     }
     state.sequence = "";
     return;
@@ -226,7 +239,15 @@ function onKeyDown(event) {
       shortcut.sequence.length >= 3 &&
       shortcut.sequence.startsWith(state.sequence)
   );
+  if (hasPrefix && state.sequence.length === event.key.length) {
+    window.CrispQuickRepliesDiagnostics.record("shortcut_sequence_started");
+  }
   if (!hasPrefix) {
+    if (state.sequence.length > 1) {
+      window.CrispQuickRepliesDiagnostics.record(
+        "shortcut_sequence_prefix_mismatch"
+      );
+    }
     const lastCharacter = state.sequence.slice(-1);
     state.sequence = shortcuts.some(
       (shortcut) =>
@@ -241,6 +262,20 @@ function onKeyDown(event) {
 }
 
 console.info("[Crisp Quick Replies] Content script loaded.");
+window.CrispQuickRepliesDiagnostics.record("content_script_loaded");
+window.addEventListener("error", (event) => {
+  window.CrispQuickRepliesDiagnostics.record("content_script_error", {
+    errorName: event.error?.name ?? "ErrorEvent",
+  });
+});
+window.addEventListener("unhandledrejection", (event) => {
+  window.CrispQuickRepliesDiagnostics.record(
+    "content_unhandled_rejection",
+    {
+      errorName: event.reason instanceof Error ? event.reason.name : "Error",
+    }
+  );
+});
 document.addEventListener("keydown", onKeyDown, true);
 document.addEventListener(
   "focusout",
@@ -270,9 +305,16 @@ function loadShortcuts() {
       console.info(
         `[Crisp Quick Replies] Loaded ${shortcuts.length} shortcut(s).`
       );
+      window.CrispQuickRepliesDiagnostics.record("content_shortcuts_loaded", {
+        shortcutCount: shortcuts.length,
+        enabledCount: shortcuts.filter((shortcut) => shortcut.enabled).length,
+      });
     })
     .catch((error) => {
       console.error("Unable to load Crisp Quick Replies shortcuts.", error);
+      window.CrispQuickRepliesDiagnostics.record("content_storage_read_failed", {
+        errorName: error.name,
+      });
     });
 }
 

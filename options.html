@@ -46,7 +46,21 @@
         <ul id="shortcut-list"></ul>
         <p id="empty-state">No shortcuts saved yet.</p>
       </section>
+
+      <section aria-labelledby="diagnostics-heading">
+        <h2 id="diagnostics-heading">Troubleshooting</h2>
+        <p>
+          Diagnostics stay in this Chrome profile until you choose to download
+          them. They do not include shortcut text, saved replies, or chat content.
+          Review the file before sharing it.
+        </p>
+        <div class="form-actions">
+          <button id="download-diagnostics" type="button">Download diagnostics</button>
+          <button id="clear-diagnostics" type="button">Clear diagnostics</button>
+        </div>
+      </section>
     </main>
+    <script src="diagnostics.js"></script>
     <script src="options.js"></script>
   </body>
 </html>

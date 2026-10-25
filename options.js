@@ -11,6 +11,8 @@ const cancelButton = document.querySelector("#cancel-button");
 const status = document.querySelector("#status");
 const list = document.querySelector("#shortcut-list");
 const emptyState = document.querySelector("#empty-state");
+const downloadDiagnosticsButton = document.querySelector("#download-diagnostics");
+const clearDiagnosticsButton = document.querySelector("#clear-diagnostics");
 
 let shortcuts = [];
 let capturedSequence = "";
@@ -119,6 +121,9 @@ async function toggleShortcut(id) {
     await saveShortcuts(nextShortcuts);
   } catch (error) {
     console.error("Unable to update Crisp shortcut.", error);
+    window.CrispQuickRepliesDiagnostics.record("shortcut_update_failed", {
+      errorName: error.name,
+    });
     showStatus("Could not update the shortcut. Check Chrome extension storage.");
   }
 }
@@ -132,6 +137,9 @@ async function deleteShortcut(id) {
     }
   } catch (error) {
     console.error("Unable to delete Crisp shortcut.", error);
+    window.CrispQuickRepliesDiagnostics.record("shortcut_delete_failed", {
+      errorName: error.name,
+    });
     showStatus("Could not delete the shortcut. Check Chrome extension storage.");
   }
 }
@@ -145,6 +153,41 @@ captureButton.addEventListener("click", () => {
 });
 
 cancelButton.addEventListener("click", resetForm);
+
+downloadDiagnosticsButton.addEventListener("click", async () => {
+  try {
+    const report = await window.CrispQuickRepliesDiagnostics.export();
+    const file = new Blob([JSON.stringify(report, null, 2)], {
+      type: "application/json",
+    });
+    const downloadUrl = URL.createObjectURL(file);
+    const link = document.createElement("a");
+    link.href = downloadUrl;
+    link.download = "crisp-quick-replies-diagnostics.json";
+    link.click();
+    setTimeout(() => URL.revokeObjectURL(downloadUrl), 1000);
+    showStatus("Diagnostics downloaded. Review the file before sharing it.");
+  } catch (error) {
+    console.error("Unable to export Crisp Quick Replies diagnostics.", error);
+    window.CrispQuickRepliesDiagnostics.record("diagnostics_export_failed", {
+      errorName: error.name,
+    });
+    showStatus("Could not download diagnostics. Check Chrome extension storage.");
+  }
+});
+
+clearDiagnosticsButton.addEventListener("click", async () => {
+  try {
+    await window.CrispQuickRepliesDiagnostics.clear();
+    showStatus("Diagnostics cleared.");
+  } catch (error) {
+    console.error("Unable to clear Crisp Quick Replies diagnostics.", error);
+    window.CrispQuickRepliesDiagnostics.record("diagnostics_clear_failed", {
+      errorName: error.name,
+    });
+    showStatus("Could not clear diagnostics. Check Chrome extension storage.");
+  }
+});
 
 document.addEventListener(
   "keydown",
@@ -211,10 +254,17 @@ form.addEventListener("submit", async (event) => {
 
   try {
     await saveShortcuts(nextShortcuts);
+    window.CrispQuickRepliesDiagnostics.record("shortcut_saved", {
+      shortcutCount: nextShortcuts.length,
+      enabledCount: nextShortcuts.filter((shortcut) => shortcut.enabled).length,
+    });
     resetForm();
     showStatus("Shortcut saved.");
   } catch (error) {
     console.error("Unable to save Crisp shortcuts.", error);
+    window.CrispQuickRepliesDiagnostics.record("shortcut_save_failed", {
+      errorName: error.name,
+    });
     showStatus("Could not save shortcuts. Check Chrome extension storage.");
   }
 });
@@ -231,9 +281,31 @@ chrome.storage.local
             typeof entry.enabled === "boolean"
         )
       : [];
+    window.CrispQuickRepliesDiagnostics.record("options_shortcuts_loaded", {
+      shortcutCount: shortcuts.length,
+      enabledCount: shortcuts.filter((shortcut) => shortcut.enabled).length,
+    });
     renderShortcuts();
   })
   .catch((error) => {
     console.error("Unable to load Crisp shortcuts.", error);
+    window.CrispQuickRepliesDiagnostics.record("options_storage_read_failed", {
+      errorName: error.name,
+    });
     showStatus("Could not load saved shortcuts from Chrome storage.");
   });
+
+window.CrispQuickRepliesDiagnostics.record("options_page_loaded");
+window.addEventListener("error", (event) => {
+  window.CrispQuickRepliesDiagnostics.record("options_script_error", {
+    errorName: event.error?.name ?? "ErrorEvent",
+  });
+});
+window.addEventListener("unhandledrejection", (event) => {
+  window.CrispQuickRepliesDiagnostics.record(
+    "options_unhandled_rejection",
+    {
+      errorName: event.reason instanceof Error ? event.reason.name : "Error",
+    }
+  );
+});

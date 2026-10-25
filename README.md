@@ -1,5 +1,7 @@
 # Crisp Quick Replies
 
+Version 1.0.1
+
 A free Chrome extension that expands custom keyboard sequences into saved replies in the Crisp web inbox.
 
 ## Download
@@ -13,7 +15,7 @@ A free Chrome extension that expands custom keyboard sequences into saved replie
 3. Move the extracted folder to a permanent location. Keep it there so Chrome can continue loading the extension.
 4. Open `chrome://extensions` in Chrome and enable **Developer mode**.
 5. Select **Load unpacked** and choose the extracted `crisp-quick-replies-main` folder—the folder that directly contains `manifest.json`. Do not select the ZIP or an inner folder.
-6. If Chrome shows a **Site access** setting on the extension's Details page, allow it on `https://app.crisp.chat/`. The extension does not need access to all websites.
+6. Open the extension's **Details** page. If Chrome shows **Site access**, allow it on `https://app.crisp.chat/`. The extension does not need access to all websites.
 7. Open **Details → Extension options** to create your shortcuts, then refresh the Crisp tab.
 
 ## Configure and use
@@ -29,15 +31,25 @@ The matching sequence is replaced with the saved response in the draft. The exte
 - Confirm the extension is enabled at `chrome://extensions`.
 - Confirm **Load unpacked** was given the extracted project folder containing `manifest.json`.
 - Keep the extracted folder in place; do not run the extension from the ZIP.
+- In **Details → Site access**, allow the extension on `https://app.crisp.chat/` if Chrome displays this setting.
 - In **Extension options**, check that the shortcut is saved and enabled.
 - Refresh the Crisp tab, click inside the reply composer, then enter the keys in order and press the final Space within 3 seconds.
 - If it still does not expand, open DevTools on Crisp, select **Console**, and check for messages beginning with `[Crisp Quick Replies]`.
+- Open **Extension options → Troubleshooting → Download diagnostics** and share the downloaded JSON file with the maintainer. Review it first; diagnostics contain event times, extension/browser version, platform, and error names, but not shortcut sequences, saved replies, or chat text. Logs are stored locally and are not sent automatically.
 
 The extension runs on `https://app.crisp.chat/` and targets editable message areas. Crisp may change its editor behavior or markup.
 
 ## Updating
 
 Download and extract the latest ZIP, replace the files in the extension folder, then click **Reload** for Crisp Quick Replies at `chrome://extensions` and refresh the Crisp tab.
+
+Version 1.0.1 adds the toolbar/options logo and a local diagnostics export to help investigate installation or shortcut issues. It also provides clearer Windows 11 installation steps.
+
+## Diagnostics and privacy
+
+The extension records a rolling log of up to 200 diagnostic events in the local Chrome profile. It records timestamps, extension/browser version, platform, event types, shortcut counts, and error names. It does not record shortcut characters, response text, customer data, or chat contents, and never uploads logs.
+
+To share a report, open **Extension options → Troubleshooting → Download diagnostics**. Review the downloaded JSON file before sharing it. Select **Clear diagnostics** to remove the local log.
 
 ## Logo
 
