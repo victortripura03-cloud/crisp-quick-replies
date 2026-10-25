@@ -1,117 +1,48 @@
-
 # Crisp Quick Replies
 
-A lightweight Chrome extension that lets you create
-custom keyboard shortcuts for saved replies in Crisp Chat.
+A free Chrome extension that expands custom keyboard sequences into saved replies in the Crisp web inbox.
 
-## Download Extension
+## Download
 
-[![Download Extension](https://img.shields.io/badge/Download-Extension_ZIP-28a745?style=for-the-badge&logo=googlechrome&logoColor=white)](https://github.com/victortripura03-cloud/crisp-quick-replies/archive/refs/heads/main.zip)
+[Download the latest source ZIP](https://github.com/victortripura03-cloud/crisp-quick-replies/archive/refs/heads/main.zip).
 
-**Free to download and use.**
+## Install in Chrome on Windows 11
 
-Click the green button above to download the latest
-version of Crisp Quick Replies.
+1. Download the ZIP above.
+2. In File Explorer, right-click it and choose **Extract All**.
+3. Move the extracted folder to a permanent location. Keep it there so Chrome can continue loading the extension.
+4. Open `chrome://extensions` in Chrome and enable **Developer mode**.
+5. Select **Load unpacked** and choose the extracted `crisp-quick-replies-main` folder—the folder that directly contains `manifest.json`. Do not select the ZIP or an inner folder.
+6. If Chrome shows a **Site access** setting on the extension's Details page, allow it on `https://app.crisp.chat/`. The extension does not need access to all websites.
+7. Open **Details → Extension options** to create your shortcuts, then refresh the Crisp tab.
 
-## How to Install
+## Configure and use
 
-### Step 1: Download
+Each installation starts with an empty shortcut list. Shortcuts and replies are saved locally in that user's Chrome profile; they are not included in the GitHub download or shared between users. Each person must configure their own shortcuts in **Extension options**.
 
-1. Click the Download Extension button above.
-2. Download the ZIP file.
-3. Extract the ZIP file.
+Choose **Record keys** and press at least three keys in order. For example, press `;`, `w`, `1`, then Space to save the sequence `;w1 `, with Space as the final key. Create and enable the shortcut, then focus the Crisp reply composer and enter that sequence within 3 seconds.
 
-### Step 2: Save the Extension
+The matching sequence is replaced with the saved response in the draft. The extension never sends a message automatically.
 
-Move the extracted folder to a permanent location.
+## Troubleshooting
 
-Recommended directory:
+- Confirm the extension is enabled at `chrome://extensions`.
+- Confirm **Load unpacked** was given the extracted project folder containing `manifest.json`.
+- Keep the extracted folder in place; do not run the extension from the ZIP.
+- In **Extension options**, check that the shortcut is saved and enabled.
+- Refresh the Crisp tab, click inside the reply composer, then enter the keys in order and press the final Space within 3 seconds.
+- If it still does not expand, open DevTools on Crisp, select **Console**, and check for messages beginning with `[Crisp Quick Replies]`.
 
-Documents/
-  Chrome Extensions/
-    crisp-quick-replies-main/
+The extension runs on `https://app.crisp.chat/` and targets editable message areas. Crisp may change its editor behavior or markup.
 
-Keep all extension files inside this folder.
+## Updating
 
-### Step 3: Install in Chrome
+Download and extract the latest ZIP, replace the files in the extension folder, then click **Reload** for Crisp Quick Replies at `chrome://extensions` and refresh the Crisp tab.
 
-1. Open Google Chrome.
-2. Enter `chrome://extensions` in the address bar.
-3. Enable **Developer mode** (top right).
-4. Click **Load unpacked**.
-5. Select the extracted `crisp-quick-replies-main` folder.
-6. Make sure the folder contains `manifest.json`.
+## Logo
 
-Your extension should now appear in Chrome!
-
-### Step 4: Configure Quick Replies
-
-1. Open `chrome://extensions`.
-2. Find **Crisp Quick Replies**.
-3. Click **Details**.
-4. Select **Extension options**.
-5. Add your saved responses and keyboard shortcuts.
-6. Open or reload Crisp Chat.
-   
-
-## Required Permissions and Settings
-
-To use Crisp Quick Replies, follow these steps:
-
-1. Open Google Chrome and visit `chrome://extensions`.
-2. Enable **Developer mode** (top-right corner).
-3. Click **Load unpacked** and select the extracted extension folder containing `manifest.json`.
-4. Find **Crisp Quick Replies** and click **Details**.
-5. Under **Site access**, allow the extension to run on `https://app.crisp.chat/` if Chrome displays this option.
-6. If Chrome offers **On specific sites**, select it and add `https://app.crisp.chat/*` if supported.
-7. Open **Extension options** and configure your saved replies.
-8. Reload your Crisp Chat tab.
-
-### Permissions Explained
-
-- **Crisp site access:** Allows the extension to detect keyboard shortcuts and insert saved replies into the Crisp message editor.
-- **Extension storage:** Allows your saved replies and shortcuts to be stored in Chrome.
-- **Developer mode:** Required for manually installing an unpacked extension. It is not a permission to access your personal files.
-
-**Note:** You do not need to enable access to all websites. Only grant the permissions Chrome requests for this extension.
-
-
-## How to Use
-
-Create a saved response in the extension options.
-
-Choose **Record keys** and press at least three keys
-in sequence.
-
-Example shortcut: `;w1 `
-
-In the Crisp Chat message editor, type the same
-sequence within 3 seconds.
-
-The shortcut will automatically expand into your
-saved response.
-
-**Note:** The extension never sends messages
-automatically. It only inserts text into your draft.
-
-## Important Notes
-
-- Works only in https://app.crisp.chat/ 
-- Keep the extracted extension folder on your computer.
-- Reload the Crisp tab after installing or updating.
-- This is a manual Chrome extension installation.
-- The extension is not currently available on the
-  Chrome Web Store.
-
-## Updating the Extension
-
-1. Download the latest ZIP from this repository.
-2. Extract it and replace the files in your existing
-   extension folder.
-3. Open `chrome://extensions`.
-4. Click **Reload** on Crisp Quick Replies.
-5. Reload your Crisp Chat tab.
+The Chrome toolbar and options-page icons are in `icons/`. The PNG sizes are referenced in `manifest.json`; `icons/icon.svg` is the editable vector source.
 
 ## License
 
-MIT License.
+MIT. The extension is free to download and use. Manual installation through **Load unpacked** requires Chrome Developer mode; the extension is not currently listed on the Chrome Web Store.
