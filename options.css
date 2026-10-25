@@ -1,0 +1,159 @@
+:root {
+  color-scheme: light;
+  font-family: system-ui, sans-serif;
+  color: #17202a;
+  background: #f5f7fa;
+}
+
+body {
+  margin: 0;
+  padding: 32px 16px;
+}
+
+main {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+header,
+form,
+section {
+  padding: 24px;
+  margin-bottom: 20px;
+  border: 1px solid #dfe4ea;
+  border-radius: 10px;
+  background: #fff;
+}
+
+h1,
+h2 {
+  margin-top: 0;
+}
+
+header p,
+.hint {
+  color: #52616b;
+}
+
+label {
+  display: block;
+  margin: 18px 0 8px;
+  font-weight: 600;
+}
+
+textarea,
+output {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #aeb9c4;
+  border-radius: 6px;
+  font: inherit;
+}
+
+textarea {
+  resize: vertical;
+}
+
+output {
+  display: block;
+  min-height: 42px;
+  overflow-wrap: anywhere;
+  background: #f8fafc;
+}
+
+.sequence-row,
+.form-actions,
+.shortcut-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sequence-row output {
+  flex: 1;
+}
+
+button {
+  padding: 9px 14px;
+  border: 1px solid #b7c2cc;
+  border-radius: 6px;
+  background: #fff;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #eef3f7;
+}
+
+button:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid #82b8ff;
+  outline-offset: 2px;
+}
+
+#save-button {
+  border-color: #075e54;
+  background: #075e54;
+  color: #fff;
+}
+
+#save-button:hover {
+  background: #064c44;
+}
+
+.hint {
+  margin: 8px 0 0;
+  font-size: 0.9rem;
+}
+
+#status {
+  min-height: 1.25em;
+  margin-bottom: 0;
+}
+
+#shortcut-list {
+  display: grid;
+  gap: 12px;
+  padding: 0;
+  list-style: none;
+}
+
+.shortcut-item {
+  padding: 14px;
+  border: 1px solid #dfe4ea;
+  border-radius: 8px;
+}
+
+.shortcut-item.disabled {
+  opacity: 0.65;
+}
+
+.shortcut-item-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.shortcut-key {
+  font-family: ui-monospace, monospace;
+  font-weight: 700;
+  white-space: pre-wrap;
+}
+
+.shortcut-response {
+  margin: 10px 0;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+.shortcut-actions {
+  flex-wrap: wrap;
+}
+
+[hidden] {
+  display: none !important;
+}
