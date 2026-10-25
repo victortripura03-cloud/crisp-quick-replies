@@ -1,0 +1,12 @@
+# Local secrets and environment configuration
+.env
+.env.*
+!.env.example
+
+# Local and generated files
+.DS_Store
+Thumbs.db
+*.log
+node_modules/
+dist/
+coverage/
